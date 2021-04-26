@@ -3,7 +3,7 @@ import 'regenerator-runtime/runtime';
 import fetch from 'node-fetch';
 import { Doc } from './types';
 
-const basePath = 'https://raw.githubusercontent.com/chakra-ui/chakra-ui/main';
+const basePath = 'https://raw.githubusercontent.com/shoelace-style/shoelace';
 
 const loadDoc = async (path?: string): Promise<string> => {
   try {
@@ -21,7 +21,7 @@ const loadDoc = async (path?: string): Promise<string> => {
 export const load = async (docsMap: Doc[]): Promise<Doc[]> =>
   Promise.all(
     docsMap.map(async (doc: Doc) => ({
-      chakraDoc: await loadDoc(doc.chakra),
+      shoelaceDoc: await loadDoc(doc.shoelace),
       ...doc,
     }))
   );
