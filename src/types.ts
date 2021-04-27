@@ -3,7 +3,6 @@ export type Doc = {
   dsdDoc?: string;
 
   shoelace: string;
-  shoelaceSrc: string;
   shoelaceDoc?: string;
 
   ts?: string; // src/[name].ts
