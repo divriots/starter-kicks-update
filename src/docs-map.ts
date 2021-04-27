@@ -19,4 +19,24 @@ export default [
     shoelace: '/next/docs/components/button.md',
     shoelaceSrc: '/components/button/button.js',
   },
+  {
+    dsd: 'button-group',
+    shoelace: '/next/docs/components/button-group.md',
+    shoelaceSrc: '/components/button-group/button-group.js',
+  },
+  {
+    dsd: 'card',
+    shoelace: '/next/docs/components/card.md',
+    shoelaceSrc: '/components/card/card.js',
+  },
+  {
+    dsd: 'checkbox',
+    shoelace: '/next/docs/components/checkbox.md',
+    shoelaceSrc: '/components/checkbox/checkbox.js',
+  },
+  {
+    dsd: 'color-picker',
+    shoelace: '/next/docs/components/color-picker.md',
+    shoelaceSrc: '/components/color-picker/color-picker.js',
+  },
 ];

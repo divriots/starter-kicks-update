@@ -8,35 +8,38 @@ import { html } from '~/md-layout';
 \`\`\`
 `;
 
-const codeRegex = /^```html preview\n.+?```/gms;
+const codeRegex = /^```html preview\n(.+?)```/gms;
 const scriptRegex = /^<script>(.+?)<\/script>/gms;
 
 const enhanceDoc = (doc: string = ''): string => {
-  const withRenderedExamples = doc.replaceAll(codeRegex, (codeBlock) => {
+  const withRenderedExamples = doc.replaceAll(codeRegex, (codeBlock, code) => {
     let scriptBlock = '';
-    const htmlBlock = codeBlock.replaceAll(scriptRegex, (_, script) => {
-      scriptBlock = `${script}`;
-      return '';
-    });
+    const htmlCode = code.replaceAll(
+      scriptRegex,
+      (_: string, script: string) => {
+        scriptBlock = scriptBlock.concat(script);
+        return '';
+      }
+    );
 
     return `
-${htmlBlock.replace('html preview', 'html:html')}
+\`\`\`html:html
+${htmlCode}\`\`\`
 ${
   scriptBlock
-    ? `\n\`\`\`js script
+    ? `\`\`\`js script
 window.addEventListener('load', () => {${scriptBlock}});
-\`\`\`
-`
+\`\`\``
     : ''
 }
 #### Code
-${codeBlock}`;
+${codeBlock.replace('html preview', 'htm')}`;
   });
   return `${mdLayoutImport}\n${withRenderedExamples}`;
 };
 
 // /src/[name].ts
-export const getComponentTsContent = (doc: Doc): string => {
+const getComponentTsContent = (doc: Doc): string => {
   const slName = `Sl${upperFirst(camelCase(doc.dsd))}`;
   return `import ${slName} from '@shoelace-style/shoelace/dist${doc.shoelaceSrc}';\nexport { ${slName} };`;
 };
