@@ -10,8 +10,6 @@ import { html, registerIconLibrary } from '~/md-layout';
 
 const codePreviewRegex = /^```html preview\n(.+?)```/gms;
 const codeSampleRegex = /^```html\n/gms;
-// const codeRegex = /^```html.*?\n(.+?)```/gms;
-// const scriptRegex = /^<script>(.+?)<\/script>/gms;
 const scriptRegex = /^<script.*?>(.+?)<\/script>/gms;
 const shoelaceImportRegex = /import { registerIconLibrary }.*?;/gms;
 
@@ -47,7 +45,20 @@ const enhanceIconScriptDoc = (doc: string): string =>
       ''
     );
 
-const enhanceDoc = (doc: string = ''): string => {
+const enhanceTooltipDoc = (doc: string, docName: string): string => {
+  if (docName !== 'tooltip') return doc;
+  const relativePositionDivs = `\n\`\`\`js script
+  window.addEventListener('load', () => {
+    [...document.querySelectorAll('div')]
+      .filter((e) => e.id.startsWith('__html_html'))
+      .forEach((e) => e.setAttribute('style', 'position:relative'));
+  });
+  \`\`\`\n`;
+
+  return `${relativePositionDivs}${doc}`;
+};
+
+const enhanceDoc = (doc: string = '', docName: string): string => {
   const withRenderedExamples = doc
     .replaceAll(codeSampleRegex, '```htm\n')
     .replaceAll(codePreviewRegex, (codeBlock, code) => {
@@ -85,7 +96,12 @@ ${codeBlock.replace('html preview', 'htm').replace('html', 'htm')}`;
     withRenderedExamples
   ).replaceAll(linksRegex, (_: string, txt: string) => txt);
 
-  return `${mdLayoutImport}\n${withEnhancedIconsScript}`;
+  const withRelativePositionDivsForTooltip = enhanceTooltipDoc(
+    withEnhancedIconsScript,
+    docName
+  );
+
+  return `${mdLayoutImport}\n${withRelativePositionDivsForTooltip}`;
 };
 
 // /src/[name].ts
@@ -103,7 +119,7 @@ export const getIndexJsContent = (): string => `export * from './src/index';`;
 
 export const enhance = async (docsMap: Doc[]): Promise<Doc[]> => {
   return docsMap.map((doc: Doc) => ({
-    dsdDoc: enhanceDoc(doc.shoelaceDoc),
+    dsdDoc: enhanceDoc(doc.shoelaceDoc, doc.dsd),
     ts: getComponentTsContent(doc),
     indexTs: getIndexTsContent(doc.dsd),
     indexJs: getIndexJsContent(),
