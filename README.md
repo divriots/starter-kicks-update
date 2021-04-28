@@ -1,9 +1,9 @@
 # starter-chackra-ui-update
 
-This tool fetches the MDX for components from chakra's github, transforms them and writes them to `started-chakra-ui` kit.
+This tool fetches the MD for components from shoelace's github, transforms them and writes them to `started-shoelace` kit.
 
 Prerequisite:
-Have this repo and `starter-chakra-ui` cloned in the same parent folder.
+Have this repo and `starter-shoelace` cloned in the same parent folder.
 
 To Run:
 ```

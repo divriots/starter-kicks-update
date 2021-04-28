@@ -18,6 +18,7 @@ const shoelaceImportRegex = /import { registerIconLibrary }.*?;/gms;
 const iconsScriptDoc = /^<script>(\n\s*?fetch\('\/dist\/assets\/icons\/icons\.json'\).*?)<\/script>/gms;
 const iconInnerHtml = /^\s*?item.innerHTML = `\n.*?`;/gms;
 const iconSearchStyleRegex = /^<style>\n\s*?\.icon-search.*?<\/style>/gms;
+const linksRegex = /\[(.+?)\]\(.+?\)/g;
 
 const enhanceIconScriptDoc = (doc: string): string =>
   doc
@@ -80,7 +81,10 @@ window.addEventListener('load', () => {${scriptBlock}});
 ${codeBlock.replace('html preview', 'htm').replace('html', 'htm')}`;
     });
 
-  const withEnhancedIconsScript = enhanceIconScriptDoc(withRenderedExamples);
+  const withEnhancedIconsScript = enhanceIconScriptDoc(
+    withRenderedExamples
+  ).replaceAll(linksRegex, (_: string, txt: string) => txt);
+
   return `${mdLayoutImport}\n${withEnhancedIconsScript}`;
 };
 
