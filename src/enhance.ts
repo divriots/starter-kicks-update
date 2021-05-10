@@ -10,8 +10,7 @@ import { html, registerIconLibrary } from '~/md-layout';
 
 const codePreviewRegex = /^```html preview\n(.+?)```/gms;
 const codeSampleRegex = /^```html\n/gms;
-// const codeRegex = /^```html.*?\n(.+?)```/gms;
-// const scriptRegex = /^<script>(.+?)<\/script>/gms;
+const componentMetaRegex = /\[component-.+?\]/gim;
 const scriptRegex = /^<script.*?>(.+?)<\/script>/gms;
 const shoelaceImportRegex = /import { registerIconLibrary }.*?;/gms;
 
@@ -49,6 +48,7 @@ const enhanceIconScriptDoc = (doc: string): string =>
 
 const enhanceDoc = (doc: string = ''): string => {
   const withRenderedExamples = doc
+    .replaceAll(componentMetaRegex, '')
     .replaceAll(codeSampleRegex, '```htm\n')
     .replaceAll(codePreviewRegex, (codeBlock, code) => {
       let scriptBlock = '';
